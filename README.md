@@ -186,10 +186,10 @@ path or a full absolute path.
   Default is `random` which uses a noise initialization as in the paper; `image`
   initializes with the content image.
 * `-optimizer`: The optimization algorithm to use; either `lbfgs` or `adam`; default is `lbfgs`.
-  L-BFGS tends to give better results, but uses more memory. Switching to ADAM will reduce memory usage;
-  when using ADAM you will probably need to play with other parameters to get good results, especially
+  L-BFGS tends to give better results, but uses more memory. Switching to Adam will reduce memory usage;
+  when using Adam you will probably need to play with other parameters to get good results, especially
   the style weight, content weight, and learning rate.
-* `-learning_rate`: Learning rate to use with the ADAM optimizer. Default is 1e1.
+* `-learning_rate`: Learning rate to use with the Adam optimizer. Default is 1e1.
 
 **Output options**:
 * `-output_image`: Name of the output image. Default is `out.png`.
@@ -233,14 +233,14 @@ If you are running on a GPU, you can also try running with `-backend cudnn` to r
 By default, `neural-style-pt` uses the `nn` backend for convolutions and L-BFGS for optimization. These give good results, but can both use a lot of memory. You can reduce memory usage with the following:
 
 * **Use cuDNN**: Add the flag `-backend cudnn` to use the cuDNN backend. This will only work in GPU mode.
-* **Use ADAM**: Add the flag `-optimizer adam` to use ADAM instead of L-BFGS. This should significantly
+* **Use Adam**: Add the flag `-optimizer adam` to use Adam instead of L-BFGS. This should significantly
   reduce memory usage, but may require tuning of other parameters for good results; in particular you should
   play with the learning rate, content weight, and style weight.
   This should work in both CPU and GPU modes.
 * **Reduce image size**: If the above tricks are not enough, you can reduce the size of the generated image;
   pass the flag `-image_size 256` to generate an image at half the default size.
   
-With the default settings, neural-style-pt uses about 3.7 GB of GPU memory on my system; switching to ADAM and cuDNN reduces the GPU memory footprint to about 1GB.
+With the default settings, neural-style-pt uses about 3.7 GB of GPU memory on my system; switching to Adam and cuDNN reduces the GPU memory footprint to about 1GB.
 
 ## Speed
 Speed can vary a lot depending on the backend and the optimizer.
