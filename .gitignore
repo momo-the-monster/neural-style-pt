@@ -4,6 +4,5 @@ out*.png
 *.jpg
 *.pyc
 *.pth
-models/
-!models/download_models.py
+models/*.pth
 __pycache__/
