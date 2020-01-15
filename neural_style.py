@@ -91,7 +91,7 @@ class TransferParams():
 def main():
     transfer(params)
 
-def transfer(params):
+def transfer(params, onUpdate=None, onComplete = None):
     logging.getLogger().setLevel(params.log_level)
     dtype, multidevice, backward_device = setup_gpu()
 
@@ -266,7 +266,12 @@ def transfer(params):
             if params.original_colors == 1:
                 disp = original_colors(deprocess(content_image.clone()), disp)
 
-            disp.save(str(filename))
+            if onUpdate is not None and t < params.num_iterations:
+                onUpdate(disp)
+            elif onComplete is not None and t >= params.num_iterations:
+                onComplete(disp)
+            else:
+                disp.save(str(filename))
 
     # Function to evaluate loss and gradient. We run the net forward and
     # backward to get the gradient, and sum up losses from the loss modules.
