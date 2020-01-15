@@ -7,7 +7,7 @@ import torch.optim as optim
 import torchvision.transforms as transforms
 
 from PIL import Image
-from CaffeLoader import loadCaffemodel, ModelParallel
+from .CaffeLoader import loadCaffemodel, ModelParallel
 
 import argparse
 parser = argparse.ArgumentParser()
