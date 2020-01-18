@@ -9,7 +9,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 from CaffeLoader import loadCaffemodel, ModelParallel
 
-from bgremove import replace_bg
+from bg_remove import replace_bg
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -17,8 +17,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-style_image", help="Style target image", default='examples/inputs/seated-nude.jpg')
 parser.add_argument("-style_blend_weights", default=None)
 parser.add_argument("-content_image", help="Content target image", default='examples/inputs/tubingen.jpg')
+parser.add_argument("-bg_image", help = "Optional BG image", default='')
 parser.add_argument("-image_size", help="Maximum height / width of generated image", type=int, default=512)
 parser.add_argument("-gpu", help="Zero-indexed ID of the GPU to use; for CPU mode set -gpu = c", default=0)
+parser.add_argument("-blur_strength", help="Gaussian Blur to apply to BG Mask", default = 1)
 
 # Optimization options
 parser.add_argument("-content_weight", type=float, default=5e0)
@@ -62,8 +64,10 @@ class TransferParams():
     style_image = 'examples/inputs/seated-nude.jpg'
     style_blend_weights = None
     content_image = 'examples/inputs/tubingen.jpg'
+    bg_image = ''
     image_size = 512
     gpu = 0
+    blur_strength = 1
     content_weight = 5e0
     style_weight = 1e2
     normalize_weights = False
@@ -268,12 +272,12 @@ def transfer(params):
             if params.original_colors == 1:
                 disp = original_colors(deprocess(content_image.clone()), disp)
 
-            disp.save(str(filename))
-
             # do bg removal if this is the final image
-            if t == params.num_iterations:
-                final = replace_bg(params.content_image, "./pixel-mosaic.jpg", filename, params.image_size)
-                final.save(str(filename))
+            if t == params.num_iterations and os.path.exists(params.bg_image):
+                bg = Image.open(params.bg_image)
+                disp = replace_bg(deprocess(content_image.clone()), bg, disp, params.image_size, params.blur_strength)
+
+            disp.save(str(filename))
 
     # Function to evaluate loss and gradient. We run the net forward and
     # backward to get the gradient, and sum up losses from the loss modules.
