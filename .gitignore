@@ -6,3 +6,5 @@ out*.png
 *.pth
 models/*.pth
 __pycache__/
+.vscode/
+env/

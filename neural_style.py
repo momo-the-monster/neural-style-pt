@@ -9,6 +9,8 @@ import torchvision.transforms as transforms
 from PIL import Image
 from CaffeLoader import loadCaffemodel, ModelParallel
 
+from bgremove import replace_bg
+
 import argparse
 parser = argparse.ArgumentParser()
 # Basic options
@@ -267,6 +269,11 @@ def transfer(params):
                 disp = original_colors(deprocess(content_image.clone()), disp)
 
             disp.save(str(filename))
+
+            # do bg removal if this is the final image
+            if t == params.num_iterations:
+                final = replace_bg(params.content_image, "./pixel-mosaic.jpg", filename, params.image_size)
+                final.save(str(filename))
 
     # Function to evaluate loss and gradient. We run the net forward and
     # backward to get the gradient, and sum up losses from the loss modules.
