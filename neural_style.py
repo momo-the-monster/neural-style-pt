@@ -20,7 +20,7 @@ parser.add_argument("-content_image", help="Content target image", default='exam
 parser.add_argument("-bg_image", help = "Optional BG image", default='')
 parser.add_argument("-image_size", help="Maximum height / width of generated image", type=int, default=512)
 parser.add_argument("-gpu", help="Zero-indexed ID of the GPU to use; for CPU mode set -gpu = c", default=0)
-parser.add_argument("-blur_strength", help="Gaussian Blur to apply to BG Mask", default = 1)
+parser.add_argument("-blur_strength", type=int, help="Gaussian Blur to apply to BG Mask", default = 1)
 
 # Optimization options
 parser.add_argument("-content_weight", type=float, default=5e0)
